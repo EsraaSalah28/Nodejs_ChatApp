@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <form id ="form">
+    <input id="content" type="text" name="content">
+    <button type="submit" > Send </button>
+    
+    </form>
+    <div id="messages" style="white-space: pre-wrap"></div>
+
+</body>
+<script>
+const form =document.getElementById('form');
+const input = document.getElementById('content');
+const messages=document.getElementById('messages');
+form.addEventListener('submit',(e)=>{
+e.preventDefault();
+const messages = input.value;
+axios.post('http://localhost:3000/messages',{messages}).then(res=>input.value='')
+
+})
+
+const evtSource =new EventSource('http://localhost:3000/messages')
+
+evtSource.onmessage = (e)=> {
+  
+ const data =JSON.parse(e.data)  
+ messages.innerHTML =messages.innerHTML+data.messages +'\n'
+}
+
+</script>
+</html>
